@@ -1,0 +1,36 @@
+db.bios.find({"awards": {$exists: true}})
+db.bios.find({"awards": {$exists: false}})
+db.bios.find({contribs: {$in: ["UNIX", "OOP"]}})
+db.bios.find({"awards.award": "Turing Award"})
+db.bios.find({"_id":{$in:[3,4,5,6,7]}})
+db.bios.find({"awards.year": {$lt:2000}})
+db.bios.find({$and: [{"birth": {$exists: true}}, {"death": {$exists: false}}]})
+
+*************************************
+
+var d = db.bios
+
+Delete your least favorite scientist from the collection.
+  d.remove({'_id':9}, true)
+
+Add a new award entry for your most favorite scientist. Make up your award.
+  d.update({contribs: {$in: ["UNIX", "C"]}}, {$push:{awards:{"award": "Super Sciencey Award", "year": "1987", "by": "Some Dude on the Street"}}}, false, false)
+
+
+Get the count of bios that have awards with years after 1991.
+  d.find({"awards.year": {$lt:1991}}).count()
+
+Find all records and sort by last name ascending.
+  d.find().sort({"name.last":1})
+
+Find all records and sort by _id descending.
+d.find().sort({"_id":-1})
+
+Return the first and last name of bios that have awards granted by IEEE.
+d.find({"awards.by":"IEEE"},{"name":1})
+
+Update each document with a new field, pre_node, that is set to true.
+d.update({}, {$set: {pre_node:true}}, false, true)
+
+Find the first 3 records
+d.find({}).limit(3)
